@@ -10,8 +10,8 @@ import Island from '../models/Island'
 const home = () => {
   const adjustIslandForScreenSize = () => {
     let screenScale = null;
-    let screenPosition = [0, -6.5, -43];
-    let rotation = [0.1, 4.7, 0]
+    let screenPosition = [-8.5, -15.5, -30];
+    let rotation = [-1.1, 0, -1.5]
 
     if(window.innerWidth < 768) {
       screenScale = [0.9, 0.9, 0.9]
