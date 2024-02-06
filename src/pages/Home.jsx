@@ -1,4 +1,4 @@
-import {Suspense} from 'react'
+import { useState, Suspense} from 'react'
 import { Canvas } from '@react-three/fiber'
 import { Loader } from '../components/Loader'
 
@@ -11,6 +11,8 @@ import  Plane  from '../models/Plane'
   POPUP
 </div> */}
 const home = () => {
+  const [isRotating, setIsRotating] = useState(false);
+
   const adjustIslandForScreenSize = () => {
     let screenScale = null;
     let screenPosition = [-8.5, -15.5, -30];
@@ -24,12 +26,27 @@ const home = () => {
     return [ screenScale, screenPosition, rotation]
   }
 
+  const adjustPlaneForScreenSize = () => {
+    let screenScale, screenPosition ;
+  
+
+    if(window.innerWidth < 768) {
+      screenScale = [1.5, 1.5, 1.5]
+      screenPosition = [5, -1.5, 0]
+    } else  {
+      screenScale = [3, 3, 3]
+      screenPosition = [0, -2, -4]
+    }
+    return [ screenScale, screenPosition]
+  }
+
   const [islandScale, islandPosition, islandRotation] = adjustIslandForScreenSize();
+  const [planeScale, planePosition] = adjustPlaneForScreenSize();
 
   return (
     <section className="w-full h-screen relative">
       <Canvas 
-        className="w-full h-screen bg-transparent"
+        className={`w-full h-screen bg-transparent ${isRotating ? "cursor-grabbing" : "cursor-grab"}`}
         camera={{ near: 0.1, far: 1000}}
       >
         <Suspense fallback={<Loader />}>
@@ -43,8 +60,15 @@ const home = () => {
             position={islandPosition}
             scale={islandScale}
             rotation={islandRotation}
+            isRotating={isRotating}
+            setIsRotating={setIsRotating}
           />
-          <Plane />
+          <Plane 
+          isRotating={isRotating}
+            position={planePosition}
+            scale={planeScale}
+            rotation={[0, 20, 0]}
+          />
         </Suspense>
       </Canvas>
     </section>
